@@ -1,31 +1,29 @@
 package infosys.poc.kafkaproducer.config;
 
 import infosys.poc.kafkaproducer.controllers.ProducerController;
-import infosys.poc.kafkaproducer.model.Match;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 @Configuration
-public class ProducerConfig {
+public class ProducerConfiguration {
 
     @Bean
     public Properties getKafkaProperties() throws IOException {
 
-        Properties properties = new Properties();
+        Properties props = new Properties();
 
-        InputStream stream = ProducerController.class.getClassLoader().getResourceAsStream("kafka.properties");
+        InputStream stream = ProducerController.class.getClassLoader().getResourceAsStream("application.properties");
 
-        properties.load(stream);
+        props.load(stream);
 
-        return properties;
+        return props;
     }
 
     @Bean
@@ -36,9 +34,9 @@ public class ProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Match> kafkaTemplate() throws IOException {
+    public KafkaTemplate kafkaTemplate() throws IOException {
 
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate(producerFactory());
     }
 
 
