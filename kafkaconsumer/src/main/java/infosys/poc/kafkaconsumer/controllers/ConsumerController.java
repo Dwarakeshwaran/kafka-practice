@@ -19,12 +19,6 @@ import java.nio.ByteBuffer;
 @AllArgsConstructor
 public class ConsumerController {
 
-    @Value("${aws.access.key.id}")
-    private String accessKeyId;
-
-    @Value("${aws.secret.key}")
-    private String secretKey;
-
     @Value("${firehose.delivery-stream.name}")
     private String deliveryStreamName;
 
@@ -37,10 +31,7 @@ public class ConsumerController {
         data = data + "\n";
 
         System.out.println(data);
-
-        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
-
-        AmazonKinesisFirehose firehoseClient = getFirehoseClient(credentials);
+        AmazonKinesisFirehose firehoseClient = getFirehoseClient();
 
         PutRecordRequest putRecordRequest = new PutRecordRequest();
         putRecordRequest.setDeliveryStreamName(deliveryStreamName);
@@ -55,11 +46,10 @@ public class ConsumerController {
 
     }
 
-    public AmazonKinesisFirehose getFirehoseClient(BasicAWSCredentials credentials){
+    public AmazonKinesisFirehose getFirehoseClient(){
 
         return AmazonKinesisFirehoseClientBuilder
                 .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(Regions.US_EAST_1)
                 .build();
     }
